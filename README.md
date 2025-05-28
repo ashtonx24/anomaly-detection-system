@@ -1,76 +1,102 @@
-**Anomaly Detection in Network Traffic using Autoencoders and K-Means Clustering**
+# Anomaly Detection in Network Traffic using Autoencoders and K-Means Clustering
 
-# **1. Introduction**
-In modern network security, **anomaly detection** plays a crucial role in identifying malicious activities such as cyberattacks, fraud, and unauthorized access. Traditional rule-based methods are often ineffective against evolving threats, making **machine learning-based anomaly detection** a more reliable approach.
+## 1. Introduction  
+In modern network security, anomaly detection plays a crucial role in identifying malicious activities such as cyberattacks, fraud, and unauthorized access. Traditional rule-based methods are often ineffective against evolving threats, making machine learning-based anomaly detection a more reliable approach.
 
-This project explores **unsupervised anomaly detection** using a **Hybrid Model combining Autoencoders and K-Means Clustering**. By leveraging these models, we can detect deviations in network traffic data and classify them as potential anomalies.
+This project implements an unsupervised anomaly detection system using a hybrid model that combines Autoencoders (deep learning) and K-Means Clustering (statistical method) to detect deviations in network traffic data and classify potential anomalies.
 
-# **2. Dataset Overview**
-The dataset used in this project is the **KDD Cup 1999 Intrusion Detection Dataset**, one of the most widely used benchmarks for network anomaly detection. It contains network connection records with various features, including:
-- **Numerical Attributes** (e.g., duration, byte counts, error rates)
-- **Categorical Attributes** (e.g., protocol type, service type, flag status)
+---
 
-We used both the **10% corrected training dataset** for model training and the **unlabeled test dataset** for evaluating real-world performance.
+## 2. Dataset Overview  
+The dataset used is the KDD Cup 1999 Intrusion Detection Dataset, a widely used benchmark for network anomaly detection. It contains various features of network connections:
 
-# **3. Methodology**
-### **3.1 Data Preprocessing**
-- **Categorical Encoding**: Label encoding was applied to categorical features.
-- **Feature Scaling**: StandardScaler was used to normalize numerical values.
-- **Handling Imbalance**: SMOTE was initially considered but later replaced with a hybrid thresholding method.
+- Numerical attributes (e.g., duration, byte counts, error rates)  
+- Categorical attributes (e.g., protocol type, service type, flag status)  
 
-### **3.2 Anomaly Detection Approach**
-This project implements a **Hybrid Model**, combining two different anomaly detection techniques:
+The 10% corrected training dataset was used for training, and the unlabeled test dataset was used for evaluation.
 
-**(i) Autoencoder (Deep Learning-based)**
-- Autoencoders learn to reconstruct normal network traffic efficiently.
-- Reconstruction error is used to determine anomalies.
-- Anomalies are identified using a threshold (97th percentile of reconstruction errors).
+---
 
-**(ii) K-Means Clustering (Statistical-based)**
-- Clusters similar network traffic patterns.
-- Distance from the cluster centroid is used as an anomaly indicator.
-- The 97th percentile of distances is used as the anomaly threshold.
+## 3. Methodology  
 
-### **3.3 Hybrid Anomaly Detection**
-- If **both** Autoencoder and K-Means classify a record as an anomaly, it is marked as a **high-confidence anomaly**.
-- This method reduces false positives and increases precision.
+### 3.1 Data Preprocessing  
+- Categorical features encoded using label encoding.  
+- Numerical features normalized with StandardScaler.  
+- Handling data imbalance with a hybrid thresholding method.
 
-# **4. Implementation & Execution**
-The implementation follows these structured steps:
-### **4.1 Model Training**
-1. **Preprocessing**: Data encoding and normalization.
-2. **Autoencoder Training**: Deep learning model trained on normal network data.
-3. **K-Means Clustering**: Used for anomaly detection via clustering.
-4. **Hybrid Thresholding**: Anomalies are detected using both methods.
+### 3.2 Anomaly Detection Approach  
+The hybrid model uses two complementary techniques:  
 
-### **4.2 Testing & Evaluation**
-1. **Test Data Processing**: The model is tested on real-world traffic data (unlabeled KDD dataset).
-2. **Anomaly Detection Execution**: The trained Autoencoder and K-Means model analyze test samples.
-3. **Hybrid Anomaly Flagging**: Combining results from both models.
-4. **Result Analysis**: Comparison of detected anomalies and clustering behavior.
+- **Autoencoder**: A deep learning model trained to reconstruct normal traffic patterns. Reconstruction errors above the 97th percentile threshold indicate anomalies.  
+- **K-Means Clustering**: Clusters network traffic patterns; distance from cluster centroids beyond the 97th percentile threshold indicates anomalies.
 
-# **5. Results & Findings**
-✅ **Total Samples Processed**: 2,984,154
-✅ **Autoencoder Detected Anomalies**: 149,206
-✅ **K-Means Detected Anomalies**: 149,208
-✅ **High-Confidence Hybrid Anomalies**: 50,606
+### 3.3 Hybrid Detection  
+Records flagged as anomalies by **both** Autoencoder and K-Means are marked as high-confidence anomalies, reducing false positives and improving precision.
 
-**Key Observations:**
-- **Autoencoder alone** detects more anomalies but has a slightly higher false positive rate.
-- **K-Means alone** identifies similar anomalies but struggles with overlapping patterns.
-- **Hybrid detection** improves precision by cross-verifying anomalies, reducing false positives.
+---
 
-# **6. Conclusion & Future Work**
-### **6.1 Conclusion**
-This project successfully demonstrated a **hybrid anomaly detection framework** for network security. By combining deep learning-based Autoencoders with K-Means clustering, the model improves precision and reduces false positives.
+## 4. Implementation & Execution  
 
-### **6.2 Future Enhancements**
-🚀 **Fine-tuning K-Means Clustering**: Experimenting with alternative clustering methods like DBSCAN or Gaussian Mixture Models.
-🚀 **Real-Time Deployment**: Integrating the model into a real-time Intrusion Detection System (IDS).
-🚀 **Adaptive Thresholding**: Using dynamic thresholds instead of static percentile-based cutoffs.
-🚀 **Feature Selection Optimization**: Implementing PCA or feature importance analysis to refine input features.
+### 4.1 Model Training  
+- Data encoding and normalization.  
+- Autoencoder trained on normal data to learn reconstruction.  
+- K-Means clustering applied for statistical anomaly detection.  
+- Hybrid thresholding combining both models' results.  
 
-# **7. References**
-- KDD Cup 1999 Dataset Documentation
-- Research papers on Hybrid Anomaly Detection
-- TensorFlow & Scikit-learn Documentation
+This project leverages **Google Colab** for data processing and model training, enabling efficient handling of large datasets and computationally intensive tasks without requiring local high-performance hardware.
+
+### 4.2 Testing & Evaluation  
+- Model tested on real-world network traffic data (unlabeled).  
+- Anomalies detected via both Autoencoder and K-Means.  
+- High-confidence anomalies identified by cross-verification.
+
+---
+
+## 5. Results & Findings  
+
+| Metric                         | Count      |
+|-------------------------------|------------|
+| Total samples processed        | 2,984,154  |
+| Anomalies detected by Autoencoder | 149,206  |
+| Anomalies detected by K-Means  | 149,208    |
+| High-confidence hybrid anomalies | 50,606   |
+
+**Key observations:**  
+- Autoencoder detects more anomalies but with a slightly higher false positive rate.  
+- K-Means struggles with overlapping patterns but aligns closely in detections.  
+- Hybrid detection improves precision by cross-verifying anomalies, reducing false positives.
+
+---
+
+## 6. Conclusion & Future Work  
+
+### 6.1 Conclusion  
+This project demonstrates a hybrid anomaly detection framework leveraging both deep learning and statistical clustering. Combining Autoencoders with K-Means clustering reduces false positives and improves anomaly detection precision in network traffic.
+
+### 6.2 Future Enhancements  
+- Experiment with alternative clustering methods like DBSCAN or Gaussian Mixture Models.  
+- Integrate the model into a real-time Intrusion Detection System (IDS).  
+- Implement adaptive thresholding using dynamic cutoffs instead of static percentiles.  
+- Optimize feature selection with PCA or feature importance analysis.
+
+---
+
+## 7. How to Run  
+
+1. Clone this repository.  
+2. Install dependencies (TensorFlow, Scikit-learn, Pandas, NumPy).  
+3. Preprocess the dataset as described in the preprocessing scripts.  
+4. Train the Autoencoder and K-Means models using provided training scripts.  
+5. Run the evaluation scripts on the test dataset to detect anomalies.  
+6. Check results in the output files/logs.
+
+---
+
+## 8. References  
+- KDD Cup 1999 Dataset Documentation  
+- Research papers on Hybrid Anomaly Detection  
+- TensorFlow & Scikit-learn official documentation
+
+---
+
+*Feel free to reach out if you have any questions or want to collaborate!*
